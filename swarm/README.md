@@ -36,6 +36,16 @@ Access: sign-up is closed to everyone not in `SWARM_ADMIN_EMAILS`; every page an
 The API token stays server-side. The browser never talks to the Python API. Edits to a draft can't remove the unsubscribe footer.
 The Python API holds the state and the paused LangGraph checkpoints, so host it somewhere persistent (VM/container with a volume), not on Vercel.
 
+## Docker (API only)
+```
+cd swarm && cp .env.example .env     # set SWARM_API_TOKEN (and ANTHROPIC_API_KEY later)
+docker compose up -d --build         # API on 127.0.0.1:8000, data in the `swarm-data` volume
+```
+- `/data` must be a persistent volume: it holds the memory DB and the paused approval checkpoints (survive restarts, verified).
+- Run exactly one container/process (SQLite + in-process lock). Don't scale it or add `--workers`.
+- Port is bound to localhost. To reach it from Vercel, put TLS in front (Fly/Railway/Caddy) and keep the bearer token secret.
+- Runs as a non-root user. Healthcheck sends the token to `/health`.
+
 ## Guardrails (enforced in code, not prompts)
 - No send without an approved draft; `DRY_RUN=true` by default; `DAILY_SEND_CAP`.
 - Draft must cite evidence ids that exist; any number not in evidence/product facts is rejected; price/ROI/guarantee language is banned.
