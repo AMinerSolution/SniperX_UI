@@ -1,0 +1,13 @@
+{
+  "name": "DPX / Shopify merchants with real inventory pain",
+  "product": "Demand Planner X (DPX)",
+  "platforms": ["shopify"],
+  "min_employees": 8,
+  "max_employees": 200,
+  "min_gmv": 1000000,
+  "max_gmv": 30000000,
+  "target_titles": ["head of operations", "director of operations", "vp operations", "operations manager", "supply chain", "inventory", "purchasing", "procurement", "coo", "founder", "co-founder", "owner"],
+  "pain_signals": ["stockout", "out of stock", "sold out", "backorder", "overstock", "dead stock", "excess inventory", "reorder", "purchase order", "lead time", "preorder", "pre-order", "seasonal", "3pl", "multiple warehouses", "spreadsheet", "hiring inventory", "inventory manager", "demand planner"],
+  "tech_signals": ["shopify plus", "shopify", "shipbob", "shipmonk", "3pl", "klaviyo", "netsuite", "cin7", "inventory planner", "stocky"],
+  "disqualifiers": ["agency", "dropship", "dropshipping", "print on demand", "print-on-demand", "marketplace only", "amazon only", "going out of business", "closing down"]
+}
