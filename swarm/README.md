@@ -24,6 +24,18 @@ python -m swarm stats
 pytest -q
 ```
 
+## Approval UI (Next.js, `/swarm`)
+```
+# 1. swarm API (needs a token; refuses to start without one)
+cd swarm && SWARM_API_TOKEN=<secret> python -m swarm.api          # 127.0.0.1:8000
+# 2. web app: set in the repo-root .env (see .env.example)
+#    POSTGRES_URL, AUTH_SECRET, SWARM_ADMIN_EMAILS=you@x.com, SWARM_API_URL=http://127.0.0.1:8000, SWARM_API_TOKEN=<same secret>
+pnpm dev    # sign up with an allowlisted email at /register, then /swarm
+```
+Access: sign-up is closed to everyone not in `SWARM_ADMIN_EMAILS`; every page and server action re-checks the allowlist (empty list = nobody).
+The API token stays server-side. The browser never talks to the Python API. Edits to a draft can't remove the unsubscribe footer.
+The Python API holds the state and the paused LangGraph checkpoints, so host it somewhere persistent (VM/container with a volume), not on Vercel.
+
 ## Guardrails (enforced in code, not prompts)
 - No send without an approved draft; `DRY_RUN=true` by default; `DAILY_SEND_CAP`.
 - Draft must cite evidence ids that exist; any number not in evidence/product facts is rejected; price/ROI/guarantee language is banned.

@@ -3,12 +3,15 @@ import { Form } from 'app/form';
 import { redirect } from 'next/navigation';
 import { createUser, getUser } from 'app/db';
 import { SubmitButton } from 'app/submit-button';
+import { isAdmin } from 'app/swarm/access';
 
 export default function Login() {
   async function register(formData: FormData) {
     'use server';
     let email = formData.get('email') as string;
     let password = formData.get('password') as string;
+    // Sign-up is closed: only allowlisted operators may create accounts.
+    if (!isAdmin(email)) return 'Sign-up is restricted';
     let user = await getUser(email);
 
     if (user.length > 0) {
