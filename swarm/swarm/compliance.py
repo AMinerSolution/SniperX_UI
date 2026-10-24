@@ -10,6 +10,13 @@ def footer(cfg: Config) -> str:
             f"Not relevant? Reply \"unsubscribe\" and I won't contact you again.")
 
 
+def ensure_footer(cfg: Config, body: str) -> str:
+    """Edited bodies keep the unsubscribe/address footer: strip any partial copy, re-append the real one."""
+    marker = "\n\n--\n"
+    head = body.split(marker)[0].rstrip() if marker in body else body.rstrip()
+    return head + footer(cfg)
+
+
 def ready_to_send(cfg: Config) -> list[str]:
     """Blocking problems for live sending (not required in dry-run)."""
     problems = []

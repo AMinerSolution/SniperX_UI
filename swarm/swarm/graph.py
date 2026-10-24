@@ -12,7 +12,7 @@ from langgraph.graph import END, START, StateGraph
 from langgraph.types import Command, interrupt
 
 from .agents import outreach, qualifier, research
-from .compliance import ready_to_send
+from .compliance import ensure_footer, ready_to_send
 from .context import Ctx
 
 
@@ -109,6 +109,8 @@ def decide(ctx: Ctx, graph, draft_id: int, action: str, body: Optional[str] = No
     d = ctx.mem.get_draft(draft_id)
     if d.status != "pending":
         raise ValueError(f"draft {draft_id} is {d.status}, not pending")
+    if body and d.channel == "email":
+        body = ensure_footer(ctx.cfg, body)
     if d.kind == "reply":
         if action == "approve":
             if body:
