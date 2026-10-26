@@ -1,0 +1,15 @@
+# Usage: cp .env.example .env  (set SWARM_API_TOKEN etc.)  &&  docker compose up -d --build
+services:
+  swarm-api:
+    build: .
+    env_file: .env
+    environment:
+      SWARM_DB: /data/swarm.db   # keep inside the volume regardless of .env
+    ports:
+      - "127.0.0.1:8000:8000"    # localhost only. Put TLS/private networking in front before exposing it.
+    volumes:
+      - swarm-data:/data
+    restart: unless-stopped
+
+volumes:
+  swarm-data:
